@@ -196,8 +196,19 @@ plot(w_map_r)
 points(uniq_checks_dinamarca$lon,uniq_checks_dinamarca$lat, col = "red", cex = .7, pch=20)
 
 rus_map_r <- getMap(resolution = "low")
-plot(rus_map_r, xlim = c(10,11), ylim = c(55, 60), asp = 1)
+plot(rus_map_r, xlim = c(9,15), ylim = c(55, 57), asp = 1)
 points(uniq_checks_dinamarca$lon, uniq_checks_dinamarca$lat, col = "red", cex = .7, pch=20)
+
+# Recordar instalar antes
+install.packages("ggmap")
+library("ggmap")
+din_mapa_1 <- get_map(location = c(11,56), zoom = 7) 
+ggmap(din_mapa_1)
+din_checkin_map_1 <- ggmap(din_mapa_1) +
+  geom_point(aes(x = lon, y = lat,colour="red"),
+             alpha = 0.5,
+             data = uniq_checks_dinamarca)
+din_checkin_map_1
 
 hist(table(table(checkins_dinamarca$id)),breaks = 100)
 table(table(checkins_dinamarca$id)>1)
