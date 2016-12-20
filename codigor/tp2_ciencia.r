@@ -108,6 +108,7 @@ dim(checkins_dinamarca)
 # > dim(checkins_dinamarca)
 # [1] 7624    6
 
+
 head(checkins_dinamarca,10)
 # fijate que el id 62 se loguea siempre en el mismo loc_id
 # y fijate que el id 70 y el 103 se loguearon en distintos lugares 
@@ -212,3 +213,18 @@ din_checkin_map_1
 
 hist(table(table(checkins_dinamarca$id)),breaks = 100)
 table(table(checkins_dinamarca$id)>1)
+
+tabla_freq<-data.frame(table(checkins_dinamarca$loc_id))
+colnames(tabla_freq)<-c("loc_id","freq")
+head(uniq_checks_dinamarca)
+uniq_checks_din_count <- inner_join(uniq_checks_dinamarca, tabla_freq, by = "loc_id")
+plot(density(uniq_checks_din_count$freq,bw=10))
+
+head(table(checkins_dinamarca$loc_id))
+
+uniq_checks_din_count[which(uniq_checks_din_count$loc_id=="02d45853a5725893e0b926a02094f59d3b690dca"),]
+#mapa3
+din_checkin_map_2 <- ggmap(din_mapa_1) + geom_point(aes(x = lon, y = lat, col = log10(uniq_checks_din_count$freq)),
+                                                    alpha = 0.5,
+                                                    data = uniq_checks_din_count) + scale_color_gradient(low="blue", high="red")
+din_checkin_map_2
