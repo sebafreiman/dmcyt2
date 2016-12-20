@@ -188,3 +188,16 @@ plot(red_dinamarca)
 red_dinamarca
 plot(red_dinamarca, vertex.label = NA, vertex.size = 8, vertex.color = color_grado)
 plot(walktrap_dinamarca,red_dinamarca, vertex.label = NA, vertex.size = 8)
+
+
+#mapear
+w_map_r <- getMap(resolution = "low")
+plot(w_map_r)
+points(uniq_checks_dinamarca$lon,uniq_checks_dinamarca$lat, col = "red", cex = .7, pch=20)
+
+rus_map_r <- getMap(resolution = "low")
+plot(rus_map_r, xlim = c(10,11), ylim = c(55, 60), asp = 1)
+points(uniq_checks_dinamarca$lon, uniq_checks_dinamarca$lat, col = "red", cex = .7, pch=20)
+
+hist(table(table(checkins_dinamarca$id)),breaks = 100)
+table(table(checkins_dinamarca$id)>1)
