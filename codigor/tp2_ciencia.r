@@ -26,10 +26,10 @@ coords_pais = function(points)
 }
 
 
-# download.file("http://snap.stanford.edu/data/loc-brightkite_edges.txt.gz", destfile = "brkred.gz")
+#download.file("http://snap.stanford.edu/data/loc-brightkite_edges.txt.gz", destfile = "brkred.gz")
 red <- read.table(gzfile("brkred.gz"), header=F,stringsAsFactors = F)
 
-# download.file("http://snap.stanford.edu/data/loc-brightkite_totalCheckins.txt.gz", destfile = "brkchk.gz")
+#download.file("http://snap.stanford.edu/data/loc-brightkite_totalCheckins.txt.gz", destfile = "brkchk.gz")
 checkins <- read.table(file = gzfile("brkchk.gz"), header=F, fill=T, stringsAsFactors = F)
 # el argumento “fill” en el read.table() es para que se puedan leer correctamente los registros con datos faltantes
 
@@ -98,7 +98,6 @@ head(uniq_checks)
 uniq_checks_dinamarca <- filter(uniq_checks, ISO3 == "DNK")
 dim(uniq_checks_dinamarca)
 head (uniq_checks_dinamarca)
-
 checkins_dinamarca <- inner_join(checkins_completos, uniq_checks_dinamarca[,3:4], by = "loc_id")
 head(checkins_dinamarca)
 dim(checkins_dinamarca)
@@ -128,6 +127,9 @@ head(sort(table(checkins_dinamarca$id), decreasing=T), n=15)
 # 1162   731   672   283   237   215   202   187   177   133   122   117   105   102    92 
 
 head(sort(table(checkins_dinamarca$id), decreasing=F), n=15)
+plot(density(table(checkins_dinamarca$id),bw = 100))
+boxplot(table(checkins_dinamarca$id))
+
 # > head(sort(table(checkins_dinamarca$id), decreasing=F), n=15)
 # 
 # 385  1452  1462  1988  3886  5840  6858  8739  9112 11866 13458 13538 15300 15726 15729 
@@ -154,7 +156,18 @@ red_dinamarca <- induced_subgraph(red.amistad, vids = uniq_usuarios_dinamarca)
 # vids	
 # Numeric vector, the vertices of the original graph which will form the subgraph.
 summary(red_dinamarca)
-
+#Analisis topologico:
+ecount(red_dinamarca)
+vcount(red_dinamarca)
+str(red_dinamarca)
+is.simple(red_dinamarca)
+is.connected(red_dinamarca)
+is.connected(red_dinamarca,mode = "weak")
+diameter(red_dinamarca)
+get.diameter(red_dinamarca)
+graph.density(red_dinamarca)
+head(transitivity(red_dinamarca, type = "local"),20)
+transitivity(red_dinamarca, type = "global")
 
 # Algunos tips de código
 #
@@ -167,9 +180,11 @@ walktrap_dinamarca$membership
 # La mayoría de los clusters tienen un solo miembro porque el grafo no es conectado y
 # hay muchos nodos de grado cero:
 sort(table(walktrap_dinamarca$membership), decreasing=T)
-is.connected(red_dinamarca)
+
+
 # Lo podemos ver también con un gráfico:
 color_grado <- ifelse(degree(red_dinamarca) > 0, "red", "blue")
-
+plot(red_dinamarca)
+red_dinamarca
 plot(red_dinamarca, vertex.label = NA, vertex.size = 8, vertex.color = color_grado)
 plot(walktrap_dinamarca,red_dinamarca, vertex.label = NA, vertex.size = 8)
